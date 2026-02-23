@@ -16,6 +16,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Base class for ORM models
 Base = declarative_base()
 
+def init_db():
+    """Create all tables in the database (if they don't exist)."""
+    Base.metadata.create_all(bind=engine)
+
 @contextmanager
 def get_db():
     """Yield a database session and ensure it is closed after use."""
