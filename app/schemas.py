@@ -7,9 +7,9 @@ returns (output). ``BaseModel`` from Pydantic v2 is used.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class TodoBase(BaseModel):
@@ -19,8 +19,8 @@ class TodoBase(BaseModel):
     description: Optional[str] = Field(None, description="Longer description of the todo")
     completed: bool = Field(False, description="Completion status")
 
-    class Config:
-        orm_mode = True
+    # Enable ORM mode for compatibility with SQLAlchemy models
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TodoCreate(TodoBase):
@@ -36,8 +36,7 @@ class TodoUpdate(BaseModel):
     description: Optional[str] = None
     completed: Optional[bool] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TodoInDBBase(TodoBase):
@@ -47,8 +46,7 @@ class TodoInDBBase(TodoBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Todo(TodoInDBBase):
@@ -60,8 +58,7 @@ class Todo(TodoInDBBase):
 class TodoList(BaseModel):
     """Wrapper for a list of todos – useful for pagination later."""
 
-    todos: list[Todo]
+    todos: List[Todo]
     total: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
