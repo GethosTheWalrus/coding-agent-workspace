@@ -34,7 +34,6 @@ def update_todo(todo_id: int, todo_in: schemas.todo.TodoUpdate, db: Session = De
 def delete_todo(todo_id: int, db: Session = Depends(get_db)):
     db_todo = crud.todo.get_todo(db=db, todo_id=todo_id)
     if not db_todo:
-        raise HTTPException(status_code=404, detail="Todo "
-                            "Todo not found")
+        raise HTTPException(status_code=404, detail="Todo not found")
     crud.todo.delete_todo(db=db, db_todo=db_todo)
     return None
