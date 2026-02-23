@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from contextlib import contextmanager
 
 # SQLite URL – using a file named 'todos.db' in the project root
 SQLALCHEMY_DATABASE_URL = "sqlite:///./todos.db"
@@ -20,9 +19,14 @@ def init_db():
     """Create all tables in the database (if they don't exist)."""
     Base.metadata.create_all(bind=engine)
 
-@contextmanager
+# FastAPI dependency that provides a DB session and ensures it is closed after use.
 def get_db():
-    """Yield a database session and ensure it is closed after use."""
+    """Yield a database session for FastAPI dependencies.
+
+    This function is a generator (uses ``yield``) so FastAPI can treat it as a
+    dependency that provides a resource and performs cleanup after the request
+    is processed.
+    """
     db = SessionLocal()
     try:
         yield db
