@@ -10,7 +10,7 @@ def get_todo(db: Session, todo_id: int) -> Optional[Todo]:
 
 
 def get_todos(db: Session, skip: int = 0, limit: int = 100) -> List[Todo]:
-    return db.query(Todo).offset(skip).first()
+    return db.query(Todo).offset(skip).limit(limit).all()
 
 
 def create_todo(db: Session, todo_in: TodoCreate) -> Todo:
