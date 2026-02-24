@@ -1,0 +1,38 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 2rem;
+  background-color: #f9f9f9;
+}
+
+h1 {
+  color: #333;
+}
+
+form {
+  margin-bottom: 1rem;
+}
+
+input, button {
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #fff;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+li.completed {
+  text-decoration: line-through;
+  color: #777;
+}

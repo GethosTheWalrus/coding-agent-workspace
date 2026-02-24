@@ -7,7 +7,7 @@ A simple Todo REST API built with **FastAPI** and **SQLite**. The project includ
 - SQLAlchemy ORM with a SQLite database
 - Automated tests with **pytest** achieving >90% coverage
 - CI pipeline using **GitHub Actions**
-- A minimal frontend UI (to be implemented)
+- A minimal frontend UI for interacting with the API
 
 ## Project Structure
 
@@ -15,17 +15,21 @@ A simple Todo REST API built with **FastAPI** and **SQLite**. The project includ
 .
 ├── app/                     # FastAPI application package
 │   ├── __init__.py
-│   ├── main.py              # FastAPI entry point
+│   ├── main.py              # FastAPI entry point (serves UI)
 │   ├── database.py          # DB engine & session
 │   ├── models.py            # SQLAlchemy models
 │   ├── schemas.py           # Pydantic schemas
-│   ├── crud.py              # CRUD helper functions (TODO)
+│   ├── crud.py              # CRUD helper functions
 │   └── routers/
-│       └── todo.py          # Todo router (TODO)
+│       └── todo.py          # Todo router
+├── frontend/                # Minimal UI (static files)
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
 ├── tests/                   # Test suite
 │   ├── __init__.py
 │   ├── conftest.py          # Pytest fixtures
-│   └── test_todo.py         # Placeholder tests (TODO)
+│   └── test_todo.py         # Tests for the API
 ├── requirements.txt         # Python dependencies
 ├── .gitignore               # Ignored files
 ├── docs/
@@ -47,11 +51,11 @@ source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the development server
+# Run the development server (includes API and UI)
 uvicorn app.main:app --reload
 ```
 
-The API will be available at `http://127.0.0.1:8000`. OpenAPI docs are at `http://127.0.0.1:8000/docs`.
+The API will be available at `http://127.0.0.1:8000`. OpenAPI docs are at `http://127.0.0.1:8000/docs`. The frontend UI can be accessed at the root URL `http://127.0.0.1:8000/`.
 
 ## Running Tests
 
@@ -61,11 +65,10 @@ pytest --cov=app --cov-report=term-missing
 
 ## CI
 
-GitHub Actions will automatically run the test suite on each push and pull request. See `.github/workflows/ci.yml` for details.
+GitHub Actions automatically runs the test suite on each push and pull request. See `.github/workflows/ci.yml` for details.
 
 ## Next Steps
 
-- Implement the CRUD logic in `app/crud.py` and route definitions in `app/routers/todo.py` (Backend Developer).
 - Write comprehensive tests covering all endpoints (QA Tester).
-- Set up CI pipeline (DevOps Engineer).
-- Build a minimal frontend UI to interact with the API (Frontend Developer).
+- Ensure CI pipeline passes (DevOps Engineer).
+- Further enhance the UI if needed (Frontend Developer).
