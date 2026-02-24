@@ -1,7 +1,7 @@
 """SQLModel definitions for Todo items.
 
-The Todo model represents the database table. The TodoCreate and
-TodoRead schemas are used for request validation and response
+The Todo model represents the database table. The TodoCreate, TodoRead,
+and TodoUpdate schemas are used for request validation and response
 serialization, respectively.
 """
 
@@ -17,12 +17,15 @@ class Todo(TodoBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
 class TodoCreate(TodoBase):
+    """Schema for creating a new Todo item."""
     pass
 
 class TodoRead(TodoBase):
+    """Schema for reading Todo items from the API."""
     id: int
 
-class TodoUpdate:
+class TodoUpdate(SQLModel):
+    """Schema for updating an existing Todo item. All fields are optional."""
     title: Optional[str] = None
-    description: Optional
-    description: """""""
+    description: Optional[str] = None
+    completed: Optional[bool] = None
