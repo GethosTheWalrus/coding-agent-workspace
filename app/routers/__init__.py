@@ -1,6 +1,7 @@
-# app/routers/__init__.py
-"""Router package for the Todo API.
+"""Routers package for the Todo API.
 
-The package currently exposes the ``todo`` router, which contains all CRUD
-endpoints for managing Todo items.
+Exports the ``router`` object from ``todo.py`` so that it can be imported as
+``from app.routers import router``.
 """
+
+from .todo import router

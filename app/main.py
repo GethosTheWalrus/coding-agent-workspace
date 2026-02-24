@@ -1,26 +1,32 @@
-# app/main.py
 """FastAPI application entry point.
 
-This module creates the FastAPI instance, includes the Todo router, and
-ensures that the SQLite database tables are created on startup.
+The app is created here so that it can be imported by both the server
+runtime (uvicorn) and the test suite without side‑effects.
 """
 
 from fastapi import FastAPI
-from .database import engine, create_db_and_tables
+from .database import init_db
 from .routers import todo
 
-app = FastAPI(title="Todo API", version="0.1.0")
 
-# Include the Todo router under the "/todos" prefix.
-app.include_router(todo.router, prefix="/todos", tags=["todos"])
+def create_app() -> FastAPI:
+    """Create and configure a FastAPI instance.
 
-# Create database tables when the application starts.
-@app.on_event("startup")
-async def on_startup() -> None:
-    """Create database tables if they do not exist.
-
-    The function is async to match FastAPI's event handling model, but the
-    underlying SQLModel call is synchronous and therefore runs in the event
-    loop without blocking.
+    Returns
+    -------
+    FastAPI
+        The configured FastAPI application with routes and database
+        initialisation.
     """
-    create_db_and_tables()
+    app = FastAPI(title="Todo API")
+    # Include routers
+    app.include_router(todo.router)
+    # Initialise the database (creates tables if needed)
+    @app.on_event("startup")
+    async def on_startup() -> None:
+        init_db()
+
+    return app
+
+# Export a ready‑to‑run app instance for uvicorn.
+app = create_app()

@@ -1,83 +1,88 @@
-# app/routers/todo.py
-"""Todo router – implements CRUD operations for Todo items.
+"""Router definitions for the Todo API.
 
-All endpoints interact with the SQLite database via a ``Session`` dependency.
-Responses are validated against the ``TodoRead`` model, ensuring a stable API
-contract.
+All CRUD endpoints are defined here. The router is included in the main
+application via ``app.include_router``.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, Depends, status, Response
 from sqlmodel import Session, select
 
 from ..database import get_session
-from ..models import Todo, TodoCreate, TodoRead
+from ..models import Todo, TodoCreate, TodoRead, TodoUpdate
 
-router = APIRouter()
+router = APIRouter(prefix="/todos", tags=["todos"])
+
+
+def get_db() -> Session:
+    """FastAPI dependency that provides a database session.
+
+    The session is automatically closed after the request.
+    """
+    with get_session() as session:
+        yield session
+
 
 @router.post("/", response_model=TodoRead, status_code=status.HTTP_201_CREATED)
-def create_todo(*, session: Session = Depends(get_session), todo: TodoCreate):
-    """Create a new Todo item.
+def create_todo(todo_in: TodoCreate, db: Session = Depends(get_db)) -> TodoRead:
+    """Create a new todo item.
 
-    The ``TodoCreate`` payload is transformed into a ``Todo`` ORM instance and
-    persisted. The newly created record (including its generated ``id``) is
-    returned.
+    Parameters
+    ----------
+    todo_in: TodoCreate
+        The data for the new todo.
+    db: Session
+        Database session provided by FastAPI dependency injection.
     """
-    db_todo = Todo.from_orm(todo)
-    session.add(db_todo)
-    session.commit()
-    session.refresh(db_todo)
-    return db_todo
+    todo = Todo.from_orm(todo_in)
+    db.add(todo)
+    db.commit()
+    db.refresh(todo)
+    return todo
+
 
 @router.get("/", response_model=list[TodoRead])
-def read_todos(*, session: Session = Depends(get_session)):
-    """Retrieve all Todo items.
-
-    Returns a list of ``TodoRead`` objects representing each row in the
-    ``todos`` table.
-    """
-    todos = session.exec(select(Todo)).all()
+def list_todos(db: Session = Depends(get_db)) -> list[TodoRead]:
+    """Return a list of all todo items."""
+    todos = db.exec(select(Todo)).all()
     return todos
 
-@router.get("/{todo_id}", response_model=TodoRead)
-def read_todo(*, session: Session = Depends(get_session), todo_id: int):
-    """Retrieve a single Todo by its ``id``.
 
-    Raises ``404`` if the Todo does not exist.
-    """
-    todo = session.get(Todo, todo_id)
+@router.get("/{todo_id}", response_model=TodoRead)
+def get_todo(todo_id: int, db: Session = Depends(get_db)) -> TodoRead:
+    """Retrieve a single todo item by its ID."""
+    todo = db.get(Todo, todo_id)
     if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
     return todo
 
-@router.put("/{todo_id}", response_model=TodoRead)
-def update_todo(*, session: Session = Depends(get_session), todo_id: int, todo: TodoCreate):
-    """Update an existing Todo.
 
-    The request body contains the new values for ``title``, ``description``
-    and ``completed``. The ``id`` is taken from the path parameter.
+@router.put("/{todo_id}", response_model=TodoRead)
+def update_todo(todo_id: int, todo_in: TodoUpdate, db: Session = Depends(get_db)) -> TodoRead:
+    """Fully replace a todo item.
+
+    All fields are optional; only provided fields are updated.
     """
-    db_todo = session.get(Todo, todo_id)
-    if not db_todo:
+    todo = db.get(Todo, todo_id)
+    if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
-    # Update fields
-    db_todo.title = todo.title
-    db_todo.description = todo.description
-    db_todo.completed = todo.completed
-    session.add(db_todo)
-    session.commit()
-    session.refresh(db_todo)
-    return db_todo
+    todo_data = todo_in.dict(exclude_unset=True)
+    for key, value in todo_data.items():
+        setattr(todo, key, value)
+    db.add(todo)
+    db.commit()
+    db.refresh(todo)
+    return todo
+
 
 @router.delete("/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_todo(*, session: Session = Depends(get_session), todo_id: int):
-    """Delete a Todo by ``id``.
+def delete_todo(todo_id: int, db: Session = Depends(get_db)) -> Response:
+    """Delete a todo item.
 
-    Returns ``204 No Content`` on success. Raises ``404`` if the Todo does not
-    exist.
+    Returns a 204 No Content response on success.
     """
-    db_todo = session.get(Todo, todo_id)
-    if not db_todo:
+    todo = db.get(Todo, todo_id)
+    if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
-    session.delete(db_todo)
-    session.commit()
-    return None
+    db.delete(todo)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

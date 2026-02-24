@@ -1,34 +1,37 @@
-# app/database.py
-"""Database configuration and helper utilities.
+"""Database utilities for the Todo API.
 
-The SQLite database lives in a file named ``todo.db`` at the project root.
-SQLModel's ``create_engine`` is used to obtain an engine, and a ``Session``
-factory is provided for request‑scoped interactions.
+This module creates a SQLite engine using SQLModel and provides a helper
+function to initialise the database schema.
 """
 
 from pathlib import Path
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import SQLModel, create_engine, Session
 
-# Path to the SQLite file – placed in the project root for simplicity.
-DATABASE_URL = f"sqlite:///{Path(__file__).resolve().parent.parent / 'todo.db'}"
+# SQLite file in the project root
+DATABASE_URL = "sqlite:///./todo.db"
 
-# ``connect_args`` with ``check_same_thread=False`` is required for SQLite when
-# using multiple threads (e.g., the FastAPI test client).
-engine = create_engine(DATABASE_URL, echo=False, connect_args={"check_same_thread": False})
+engine = create_engine(
+    DATABASE_URL,
+    echo=False,
+    connect_args={"check_same_thread": False},
+)
 
-def create_db_and_tables() -> None:
-    """Create database tables based on the SQLModel models.
+def init_db() -> None:
+    """Create database tables if they do not exist.
 
-    This function is idempotent – calling it multiple times will not raise an
-    error because SQLModel/SQLAlchemy will only create tables that do not yet
-    exist.
+    This function is idempotent – calling it multiple times will not raise
+    errors because SQLModel's ``create_all`` only creates missing tables.
     """
     SQLModel.metadata.create_all(engine)
 
 def get_session() -> Session:
-    """Yield a new SQLModel ``Session``.
+    """Return a new SQLModel session bound to the engine.
 
-    The function is intended for use with FastAPI's ``Depends`` system.
+    The caller is responsible for closing the session (e.g. using a context
+    manager ``with get_session() as session:``).
     """
-    with Session(engine) as session:
-        yield session
+    # Ensure tables exist before creating a session. This handles cases where
+    # the database file has been removed (e.g., by test fixtures) after the
+    # module was imported.
+    init_db()
+    return Session(engine)

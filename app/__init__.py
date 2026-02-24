@@ -1,8 +1,4 @@
-# app/__init__.py
-"""Top-level package for the Todo FastAPI application.
+"""Application package for the Todo API.
 
-The package is intentionally lightweight; its primary purpose is to expose
-the `app` object defined in :pymod:`app.main` when the package is imported.
+This package contains the FastAPI application, database models, and routers.
 """
-
-from .main import app  # noqa: F401
