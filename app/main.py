@@ -1,18 +1,11 @@
-"""FastAPI application entry point.
-
-This module creates the FastAPI app instance, includes the API router,
-and configures the database dependency.
-"""
-
 from fastapi import FastAPI
-from app.api.v1.todo import router as todo_router
+from app.routers import todo
 
-app = FastAPI(title="Todo API", version="0.1.0")
 
-# Include the todo router under the /api/v1 prefix
-app.include_router(todo_router, prefix="/api/v1")
+def get_application() -> FastAPI:
+    app = FastAPI(title="Todo API")
+    app.include_router(todo.router)
+    return app
 
-# Root endpoint for health check
-@app.get("/")
-async def root():
-    return {"message": "Todo API is running"}
+
+app = get_application()
