@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    container_name: todo_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+      - db_data:/data
+    environment:
+      - SQLITE_DB_PATH=/data/app.db
+    depends_on:
+      - db
+
+  # Simple static frontend served by nginx (TODO: add files)
+  frontend:
+    image: nginx:alpine
+    container_name: todo_frontend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+
+  # SQLite does not need a separate service, but we expose a volume for persistence
+  db:
+    image: alpine
+    container_name: todo_db
+    volumes:
+      - db_data:/data
+    command: ["sh", "-c", "while true; do sleep 3600; done"]
+
+volumes:
+  db_data:
+    driver: local
