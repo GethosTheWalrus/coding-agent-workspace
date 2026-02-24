@@ -1,19 +1,43 @@
 # app/routers/todo.py
 """Todo router defining API endpoints.
 
-TODO: Implement the following endpoints using FastAPI:
-- `POST /todos/` – create a new todo.
-- `GET /todos/` – list all todos.
-- `GET /todos/{todo_id}` – retrieve a specific todo.
-- `PUT /todos/{todo_id}` – update a todo.
-- `DELETE /todos/{todo_id}` – delete a todo.
-
-Each endpoint should use the appropriate Pydantic schemas from
-`app.schemas` and call the corresponding functions in `app.crud`.
+Provides CRUD operations for Todo items.
 """
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from typing import List
+
+from .. import crud, schemas
+from ..database import get_db
 
 router = APIRouter(prefix="/todos", tags=["todos"])
 
-# TODO: Define endpoint functions here
+@router.post("/", response_model=schemas.TodoRead, status_code=status.HTTP_201_CREATED)
+def create_todo_endpoint(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
+    return crud.create_todo(db, todo)
+
+@router.get("/", response_model=List[schemas.TodoRead])
+def read_todos(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_todos(db, skip=skip, limit=limit)
+
+@router.get("/{todo_id}", response_model=schemas.TodoRead)
+def read_todo(todo_id: int, db: Session = Depends(get_db)):
+    db_todo = crud.get_todo(db, todo_id)
+    if not db_todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return db_todo
+
+@router.put("/{todo_id}", response_model=schemas.TodoRead)
+def update_todo_endpoint(todo_id: int, todo: schemas.TodoUpdate, db: Session = Depends(get_db)):
+    db_todo = crud.update_todo(db, todo_id, todo)
+    if not db_todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return db_todo
+
+@router.delete("/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_todo_endpoint(todo_id: int, db: Session = Depends(get_db)):
+    success = crud.delete_todo(db, todo_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return None
