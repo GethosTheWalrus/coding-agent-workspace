@@ -9,8 +9,8 @@ def get_application() -> FastAPI:
     app.include_router(todo.router)
 
     @app.on_event("startup")
-    def on_startup():
-        # Ensure database tables are created at startup
+    def on_startup() -> None:
+        # Create database tables on startup
         database.create_db_and_tables()
 
     return app
