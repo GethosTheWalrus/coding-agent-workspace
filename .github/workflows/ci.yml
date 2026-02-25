@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      # No external services needed; backend runs in Docker
+      # No external services needed
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
@@ -21,6 +21,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run tests
+      - name: Build Docker image
         run: |
-          pytest -q --cov=app --cov-report=term-missing
+          docker build -t todo_app .
+      - name: Run tests in Docker container
+        env:
+          SQLITE_DB_PATH: /tmp/app.db
+        run: |
+          docker run --rm -e SQLITE_DB_PATH=$SQLITE_DB_PATH todo_app pytest -q --cov=app --cov-report=term-missing

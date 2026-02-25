@@ -6,3 +6,4 @@ alembic
 pytest
 pytest-asyncio
 httpx
+pytest-cov

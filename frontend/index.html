@@ -1,4 +1,3 @@
-# Frontend entry point
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,9 +8,21 @@
 </head>
 <body>
     <h1>Todo List</h1>
-    <div id="todo-app">
-        <!-- TODO: Add UI components (form, list, buttons) -->
-    </div>
+    <section id="create-section">
+        <h2>Create Todo</h2>
+        <form id="create-form">
+            <input type="text" id="title" placeholder="Title" required />
+            <input type="text" id="description" placeholder="Description" />
+            <label>
+                <input type="checkbox" id="completed" /> Completed
+            </label>
+            <button type="submit">Add</button>
+        </form>
+    </section>
+    <section id="list-section">
+        <h2>Todos</h2>
+        <ul id="todo-list"></ul>
+    </section>
     <script src="app.js"></script>
 </body>
 </html>
