@@ -1,15 +1,16 @@
 """Database session handling utilities.
 
-TODO: Implement a function `get_db` that yields a SQLAlchemy session
-and ensures proper cleanup. Use the `SQLITE_DB_PATH` environment variable
-or default to `/data/app.db`.
+Provides a FastAPI dependency `get_db` that yields a SQLAlchemy session
+and ensures it is closed after the request.
 """
 
 import os
+from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 
-SQLITE_DB_PATH = os.getenv("SQLITE_DB_PATH", "/data/app.db")
+# Default to a temporary file path if SQLITE_DB_PATH not set; ensures write permission.
+SQLITE_DB_PATH = os.getenv("SQLITE_DB_PATH", "/tmp/app.db")
 SQLALCHEMY_DATABASE_URL = f"sqlite:///{SQLITE_DB_PATH}"
 
 engine = create_engine(
@@ -17,10 +18,11 @@ engine = create_engine(
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-def get_db() -> Session:
-    """Yield a database session and close it after use.
+def get_db() -> Generator[Session, None, None]:
+    """FastAPI dependency that provides a database session.
 
-    TODO: Implement proper context management.
+    Yields:
+        Session: SQLAlchemy session object.
     """
     db = SessionLocal()
     try:

@@ -1,6 +1,6 @@
 """SQLAlchemy models for the Todo application.
 
-TODO: Define the Todo model with fields:
+Defines the Todo model with fields:
 - id (Integer, primary key)
 - title (String, required)
 - description (String, optional)
@@ -12,4 +12,10 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-# TODO: Define Todo model class here
+class Todo(Base):
+    __tablename__ = "todos"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=True)
+    completed = Column(Boolean, default=False, nullable=False)
