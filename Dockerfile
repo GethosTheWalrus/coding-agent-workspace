@@ -39,8 +39,8 @@ WORKDIR /app
 # Copy installed packages and scripts from builder
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
-# Copy application code (the package) directly into /app
-COPY --from=builder /src/app ./
+# Copy application code as a package directory
+COPY --from=builder /src/app ./app
 # Copy tests for CI (optional, not needed at runtime)
 COPY --from=builder /src/tests ./tests
 
