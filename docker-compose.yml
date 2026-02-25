@@ -1,0 +1,18 @@
+# Docker Compose configuration for FastAPI Todo API
+# This file sets up the API service and a persistent SQLite volume.
+# The backend developer will ensure the database file is correctly
+# initialized on first run.
+
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: todo_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data  # Persist SQLite DB file
+    environment:
+      - PYTHONUNBUFFERED=1
+    # TODO: Add any required environment variables (e.g., DEBUG)
