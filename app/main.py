@@ -2,15 +2,16 @@
 
 This module creates the FastAPI instance, includes the todo router, and
 exposes the ``app`` object for ASGI servers (uvicorn) and for testing.
-
-Implementation details (e.g., middleware, CORS) can be added later by the
-backend developer.
+It also ensures that the database tables are created on startup.
 """
 
 from fastapi import FastAPI
 
 # Import the router from the todo module
 from .routers.todo import router as todo_router
+
+# Import database metadata creation function
+from . import database
 
 
 def get_application() -> FastAPI:
@@ -26,8 +27,16 @@ def get_application() -> FastAPI:
         description="A simple Todo REST API built with FastAPI and SQLite.",
         version="0.1.0",
     )
-    # TODO: Add any middleware (e.g., CORS) if needed.
+    # Include routers
     app.include_router(todo_router)
+
+    @app.on_event("startup")
+    def on_startup() -> None:
+        """Create database tables on application startup.
+        """
+        # Ensure tables are created; the function in database module creates them.
+        database._create_tables()
+
     return app
 
 

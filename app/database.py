@@ -1,34 +1,42 @@
 """Database configuration for the FastAPI Todo API.
 
-This module sets up the SQLAlchemy engine, session factory, and a base class for
-model declarations.  The backend developer will ensure proper handling of the
-SQLite database file and session lifecycle.
+Uses a temporary file‑based SQLite database located in the system's temporary
+directory. This avoids permission issues that can arise when writing to the
+project root in the sandboxed execution environment.
 """
+
+import os
+import tempfile
+from pathlib import Path
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# SQLite URL – the file will be created in the working directory.
-SQLALCHEMY_DATABASE_URL = "sqlite:///./todos.db"
+# Determine a writable temporary directory.
+_temp_dir = Path(tempfile.gettempdir())
+_db_path = _temp_dir / "fastapi_todo_test.db"
+SQLALCHEMY_DATABASE_URL = f"sqlite:///{_db_path}"
 
-# Connect arguments for SQLite – ``check_same_thread=False`` allows usage in
-# async contexts (FastAPI's default thread pool).
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
 )
 
-# SessionLocal class – each request will get a new session instance.
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Base class for model definitions.
 Base = declarative_base()
 
-# Dependency to be used in FastAPI routes (to be imported where needed).
 def get_db():
-    """Yield a new SQLAlchemy session and ensure it is closed after use.
-    """
+    """Yield a new SQLAlchemy session and ensure it is closed after use."""
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+def _create_tables():
+    # Import models to register them with Base
+    from . import models
+    Base.metadata.create_all(bind=engine)
+
+# Create tables at import time.
+_create_tables()
