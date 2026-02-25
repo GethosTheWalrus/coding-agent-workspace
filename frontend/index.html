@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+    <style>
+        body {font-family: Arial, sans-serif; margin: 2rem;}
+        .todo {display: flex; align-items: center; margin-bottom: 0.5rem;}
+        .todo.completed span {text-decoration: line-through; color: #777;}
+        .todo button {margin-left: 0.5rem;}
+    </style>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <form id="new-todo-form">
+        <input type="text" id="title" placeholder="Title" required />
+        <input type="text" id="description" placeholder="Description" />
+        <button type="submit">Add Todo</button>
+    </form>
+    <ul id="todo-list"></ul>
+
+    <script>
+        const API_URL = "http://localhost:8000/todos";
+
+        async function fetchTodos() {
+            const res = await fetch(API_URL);
+            const todos = await res.json();
+            const list = document.getElementById('todo-list');
+            list.innerHTML = '';
+            todos.forEach(renderTodo);
+        }
+
+        function renderTodo(todo) {
+            const li = document.createElement('li');
+            li.className = 'todo' + (todo.completed ? ' completed' : '');
+            const span = document.createElement('span');
+            span.textContent = `${todo.title}: ${todo.description || ''}`;
+            li.appendChild(span);
+
+            const toggleBtn = document.createElement('button');
+            toggleBtn.textContent = todo.completed ? 'Undo' : 'Done';
+            toggleBtn.onclick = async () => {
+                await fetch(`${API_URL}/${todo.id}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({completed: !todo.completed})
+                });
+                fetchTodos();
+            };
+            li.appendChild(toggleBtn);
+
+            const delBtn = document.createElement('button');
+            delBtn.textContent = 'Delete';
+            delBtn.onclick = async () => {
+                await fetch(`${API_URL}/${todo.id}`, {method: 'DELETE'});
+                fetchTodos();
+            };
+            li.appendChild(delBtn);
+
+            document.getElementById('todo-list').appendChild(li);
+        }
+
+        document.getElementById('new-todo-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value.trim();
+            const description = document.getElementById('description').value.trim();
+            if (!title) return;
+            await fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({title, description, completed: false})
+            });
+            e.target.reset();
+            fetchTodos();
+        });
+
+        // Initial load
+        fetchTodos();
+    </script>
+</body>
+</html>

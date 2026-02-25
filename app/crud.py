@@ -28,8 +28,9 @@ def get_todos(db: Session, skip: int = 0, limit: int = 100) -> List[models.Todo]
 def create_todo(db: Session, todo: schemas.TodoCreate) -> models.Todo:
     """Create a new Todo record.
     """
-    # TODO: Convert Pydantic model to SQLAlchemy model and commit
-    db_todo = models.Todo(**todo.dict())
+    # Convert Pydantic model to dict using model_dump (Pydantic v2)
+    todo_data = todo.model_dump()
+    db_todo = models.Todo(**todo_data)
     db.add(db_todo)
     db.commit()
     db.refresh(db_todo)
@@ -39,11 +40,11 @@ def create_todo(db: Session, todo: schemas.TodoCreate) -> models.Todo:
 def update_todo(db: Session, todo_id: int, todo_update: schemas.TodoUpdate) -> Optional[models.Todo]:
     """Update an existing Todo. Returns the updated object or ``None`` if not found.
     """
-    # TODO: Implement update logic, handling partial fields
     db_todo = get_todo(db, todo_id)
     if not db_todo:
         return None
-    update_data = todo_update.dict(exclude_unset=True)
+    # Use model_dump with exclude_unset to get only provided fields
+    update_data = todo_update.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(db_todo, key, value)
     db.add(db_todo)
@@ -55,7 +56,6 @@ def update_todo(db: Session, todo_id: int, todo_update: schemas.TodoUpdate) -> O
 def delete_todo(db: Session, todo_id: int) -> bool:
     """Delete a Todo by ID. Returns ``True`` if deletion succeeded.
     """
-    # TODO: Implement deletion and return status
     db_todo = get_todo(db, todo_id)
     if not db_todo:
         return False
