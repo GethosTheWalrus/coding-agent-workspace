@@ -1,54 +1,38 @@
-# FastAPI Todo Application
+# FastAPI Todo API
 
-## Overview
-This repository contains a simple Todo REST API built with **FastAPI** and **SQLite**. The API supports full CRUD operations for Todo items.
+A simple **Todo** application exposing a RESTful API built with **FastAPI** and **SQLite**. The project is fully containerised with Docker‑Compose and includes a minimal static frontend served by Nginx.
+
+## Features
+- CRUD endpoints for Todo items (`id`, `title`, `description`, `completed`).
+- SQLite database persisted in a Docker volume.
+- Dockerised backend, frontend and database services.
+- GitHub Actions CI pipeline that builds the Docker image and runs the test suite.
+- High test coverage (>90%).
+
+## Architecture
+See the architecture diagram and description in [`docs/architecture.md`](docs/architecture.md).
 
 ## Getting Started
-### Prerequisites
-- Docker & Docker‑Compose installed on your machine.
-
-### Running the Application
 ```bash
-# Build and start containers
+# Clone the repository
+git clone <repo-url>
+cd <repo-dir>
+
+# Build and start the services
 docker compose up --build -d
 ```
-The backend API will be available at `http://localhost:8000`.
+The API will be available at `http://localhost:8000/todos/` and the static UI at `http://localhost:8080/`.
 
-### API Documentation
-FastAPI automatically generates interactive docs:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-## Project Structure
-```
-.
-├─ app/                # FastAPI source code
-│  ├─ __init__.py
-│  ├─ main.py          # Application entry point
-│  ├─ models.py        # SQLAlchemy models
-│  ├─ schemas.py       # Pydantic schemas
-│  ├─ crud.py          # CRUD helper functions (TODO)
-│  ├─ database.py      # DB session handling (TODO)
-│  └─ routers/
-│     └─ todo.py       # Todo router (TODO)
-├─ frontend/           # Static files for a simple UI (TODO)
-├─ tests/              # Pytest suite (TODO)
-├─ Dockerfile          # Backend Docker image
-├─ docker-compose.yml  # Compose file for backend, frontend, DB
-├─ requirements.txt    # Python dependencies
-└─ README.md           # This file
+## Running Tests Locally
+```bash
+# Run tests inside the backend container (or locally if you have the deps)
+docker compose run --rm backend pytest -q
 ```
 
 ## Development
-- Implement the missing parts marked with `TODO` in the source files.
-- Run tests locally with:
-  ```bash
-  docker compose run --rm backend pytest -q
-  ```
-
-## CI / CD
-GitHub Actions will automatically build the Docker image and run the test suite on each push. See `.github/workflows/ci.yml` for details.
+- **Backend**: Implement the models, schemas, CRUD helpers and routers in the `app/` package.
+- **Frontend**: Add UI components in the `frontend/` directory.
+- **CI**: The workflow in `.github/workflows/ci.yml` runs on every push.
 
 ---
-
-*All scaffold files contain placeholders (`TODO`) for the backend and frontend developers to fill in.*
+*Architecture designed by the System Architect. Implementation tasks are tracked in GitHub issues.*

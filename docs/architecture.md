@@ -1,56 +1,45 @@
-# Architecture Overview
+# System Architecture
 
-## High‑level Diagram
-
-```mermaid
-flowchart LR
-    subgraph DockerCompose
-        B[Backend (FastAPI)] -->|SQLite DB File| DB[(SQLite DB)]
-        F[Frontend (Static HTML/JS)] -->|HTTP API| B
-    end
-    CI[GitHub Actions CI] --> B
-    CI --> F
-```
+This document outlines the high‑level architecture of the **FastAPI Todo** application.
 
 ## Components
 
-| Component | Technology | Responsibility |
-|-----------|------------|----------------|
-| **Backend API** | FastAPI (Python 3.11) + SQLite (via SQLAlchemy) | Exposes CRUD endpoints for Todo items (`/todos`). Handles data validation, business logic, and persistence. |
-| **Frontend** | Plain HTML/CSS/JavaScript (served by Nginx) | Simple UI to interact with the API – list, create, edit, delete todos. |
-| **Database** | SQLite file (`app.db`) stored in a Docker volume | Stores Todo records. |
-| **Docker** | Docker & Docker‑Compose | Provides isolated runtime for backend, frontend, and shared DB volume. |
-| **CI/CD** | GitHub Actions | Runs unit tests, linting, and builds Docker images on each push. |
+```mermaid
+flowchart LR
+    subgraph DockerCompose[Docker‑Compose]
+        direction TB
+        Backend[FastAPI Backend] -->|SQLite DB| DB[SQLite (volume)]
+        Frontend[Nginx Static Frontend] --> Backend
+    end
+    classDef backend fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef db fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef frontend fill:#bfb,stroke:#333,stroke-width:2px;
+    class Backend backend;
+    class DB db;
+    class Frontend frontend;
+```
+
+- **FastAPI Backend** – Provides a RESTful API for CRUD operations on Todo items. It uses **SQLAlchemy** with a **SQLite** database stored in a Docker volume.
+- **SQLite Database** – Simple file‑based relational store. Persisted across container restarts via a named volume (`db_data`).
+- **Nginx Frontend** – Serves static HTML/JS files that interact with the API. (Implementation left to the frontend developer.)
+- **Docker‑Compose** – Orchestrates the three services, exposing ports `8000` (API) and `8080` (frontend).
 
 ## Data Model
 
-```mermaid
-classDiagram
-    class Todo {
-        int id PK
-        str title
-        str description
-        bool completed
-    }
-```
+| Model | Fields |
+|-------|--------|
+| `Todo` | `id: int` (PK), `title: str`, `description: str` (optional), `completed: bool` (default `false`) |
 
-## API Endpoints (FastAPI)
+## Interaction Flow
+1. **Client** (browser) loads the static UI from the Nginx container.
+2. UI makes HTTP requests to `http://localhost:8000/todos/...`.
+3. FastAPI routes forward calls to CRUD helpers which interact with the SQLite DB.
+4. Responses are returned to the UI.
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/todos/` | Create a new todo |
-| `GET` | `/todos/` | List all todos |
-| `GET` | `/todos/{id}` | Retrieve a single todo |
-| `PUT` | `/todos/{id}` | Update a todo |
-| `DELETE` | `/todos/{id}` | Delete a todo |
-
-## Development Workflow
-1. **Design** – Architecture defined in this document.
-2. **Implementation** – Backend and frontend developers fill in the TODO sections.
-3. **Testing** – QA writes tests covering >90% of the code.
-4. **CI** – GitHub Actions runs the test suite on every push.
-5. **Deployment** – Docker‑Compose can be used locally; CI can push images to a registry.
+## Extensibility
+- Swap SQLite for PostgreSQL by updating `SQLALCHEMY_DATABASE_URL` and adding the appropriate driver.
+- Add authentication middleware (e.g., OAuth2) without changing the core CRUD logic.
+- Deploy to Kubernetes – the same Docker images can be used.
 
 ---
-
-*All scaffold files contain `TODO` comments where implementation is required.*
+*Architecture designed by the System Architect. Implementation details are left to the backend, frontend, and DevOps engineers.*
