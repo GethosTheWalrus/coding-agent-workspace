@@ -9,6 +9,9 @@ A simple **Todo** application exposing a RESTful API built with **FastAPI** and 
 - GitHub Actions CI pipeline that builds the Docker image and runs the test suite.
 - High test coverage (>90%).
 
+## CI Status
+![CI](https://github.com/GethosTheWalrus/coding-agent-workspace/actions/workflows/ci.yml/badge.svg)
+
 ## Architecture
 See the architecture diagram and description in [`docs/architecture.md`](docs/architecture.md).
 
@@ -26,7 +29,7 @@ The API will be available at `http://localhost:8000/todos/` and the static UI at
 ## Running Tests Locally
 ```bash
 # Run tests inside the backend container (or locally if you have the deps)
-docker compose run --rm backend pytest -q
+	docker compose run --rm backend pytest -q
 ```
 
 ## Development
