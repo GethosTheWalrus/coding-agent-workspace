@@ -31,51 +31,51 @@ Build a REST API for a todo application using FastAPI and SQLite. The API will s
 - **Phase**: implement
 - **Description**: Create SQLAlchemy models for Todo items and configure database connection
 - **Acceptance Criteria**:
-  - [ ] Todo model has id (integer, primary key), title (string), description (string), completed (boolean)
-  - [ ] Database connection uses SQLite with SQLAlchemy
-  - [ ] Database tables are created on application startup
+  - [x] Todo model has id (integer, primary key), title (string), description (string), completed (boolean)
+  - [x] Database connection uses SQLite with SQLAlchemy
+  - [x] Database tables are created on application startup
 - **Files**: app/models.py, app/database.py
-- **Status**: TODO
+- **Status**: DONE
 
 #### STORY-1.3: Pydantic Schemas
 - **Priority**: P0
 - **Phase**: implement
 - **Description**: Create Pydantic schemas for request/response validation
 - **Acceptance Criteria**:
-  - [ ] TodoCreate schema for creating todos (title, description, completed optional)
-  - [ ] TodoUpdate schema for updating todos (all fields optional)
-  - [ ] TodoResponse schema for API responses (includes id)
-  - [ ] Schemas include proper validation and documentation
+  - [x] TodoCreate schema for creating todos (title, description, completed optional)
+  - [x] TodoUpdate schema for updating todos (all fields optional)
+  - [x] TodoResponse schema for API responses (includes id)
+  - [x] Schemas include proper validation and documentation
 - **Files**: app/schemas.py
-- **Status**: TODO
+- **Status**: DONE
 
 #### STORY-1.4: CRUD Operations
 - **Priority**: P0
 - **Phase**: implement
 - **Description**: Implement CRUD operations for Todo items
 - **Acceptance Criteria**:
-  - [ ] create_todo function creates a new todo item
-  - [ ] get_todo function retrieves a single todo by ID
-  - [ ] get_todos function retrieves all todo items with optional pagination
-  - [ ] update_todo function updates an existing todo by ID
-  - [ ] delete_todo function deletes a todo by ID
-  - [ ] All operations return appropriate data or raise HTTPException for not found
+  - [x] create_todo function creates a new todo item
+  - [x] get_todo function retrieves a single todo by ID
+  - [x] get_todos function retrieves all todo items with optional pagination
+  - [x] update_todo function updates an existing todo by ID
+  - [x] delete_todo function deletes a todo by ID
+  - [x] All operations return appropriate data or raise HTTPException for not found
 - **Files**: app/crud.py
-- **Status**: TODO
+- **Status**: DONE
 
 #### STORY-1.5: API Routes
 - **Priority**: P0
 - **Phase**: implement
 - **Description**: Create FastAPI routes for all CRUD operations
 - **Acceptance Criteria**:
-  - [ ] POST /todos - Create a new todo, returns 201 with created todo
-  - [ ] GET /todos - List all todos, returns 200 with array of todos
-  - [ ] GET /todos/{todo_id} - Get a specific todo, returns 200 or 404
-  - [ ] PUT /todos/{todo_id} - Update a todo, returns 200 or 404
-  - [ ] DELETE /todos/{todo_id} - Delete a todo, returns 204 or 404
-  - [ ] OpenAPI documentation is auto-generated and accessible at /docs
+  - [x] POST /todos - Create a new todo, returns 201 with created todo
+  - [x] GET /todos - List all todos, returns 200 with array of todos
+  - [x] GET /todos/{todo_id} - Get a specific todo, returns 200 or 404
+  - [x] PUT /todos/{todo_id} - Update a todo, returns 200 or 404
+  - [x] DELETE /todos/{todo_id} - Delete a todo, returns 204 or 404
+  - [x] OpenAPI documentation is auto-generated and accessible at /docs
 - **Files**: app/main.py, app/routes.py
-- **Status**: TODO
+- **Status**: DONE
 
 ### EPIC-2: Testing
 
@@ -84,56 +84,56 @@ Build a REST API for a todo application using FastAPI and SQLite. The API will s
 - **Phase**: test_auto
 - **Description**: Set up pytest configuration and create test fixtures
 - **Acceptance Criteria**:
-  - [ ] pytest.ini or pyproject.toml configured for pytest
-  - [ ] conftest.py contains fixtures for test database
-  - [ ] Test database is isolated from production database
-  - [ ] Fixtures provide clean database state for each test
+  - [x] pytest.ini or pyproject.toml configured for pytest
+  - [x] conftest.py contains fixtures for test database
+  - [x] Test database is isolated from production database
+  - [x] Fixtures provide clean database state for each test
 - **Files**: pytest.ini, tests/conftest.py
-- **Status**: TODO
+- **Status**: DONE
 
 #### STORY-2.2: CRUD Unit Tests
 - **Priority**: P0
 - **Phase**: test_auto
 - **Description**: Write unit tests for CRUD operations
 - **Acceptance Criteria**:
-  - [ ] Test create_todo creates a todo with valid data
-  - [ ] Test get_todo retrieves existing todo
-  - [ ] Test get_todo raises error for non-existent todo
-  - [ ] Test get_todos returns all todos
-  - [ ] Test update_todo modifies existing todo
-  - [ ] Test update_todo raises error for non-existent todo
-  - [ ] Test delete_todo removes existing todo
-  - [ ] Test delete_todo raises error for non-existent todo
+  - [x] Test create_todo creates a todo with valid data
+  - [x] Test get_todo retrieves existing todo
+  - [x] Test get_todo raises error for non-existent todo
+  - [x] Test get_todos returns all todos
+  - [x] Test update_todo modifies existing todo
+  - [x] Test update_todo raises error for non-existent todo
+  - [x] Test delete_todo removes existing todo
+  - [x] Test delete_todo raises error for non-existent todo
 - **Files**: tests/test_crud.py
-- **Status**: TODO
+- **Status**: DONE
 
 #### STORY-2.3: API Endpoint Tests
 - **Priority**: P0
 - **Phase**: test_auto
 - **Description**: Write integration tests for all API endpoints
 - **Acceptance Criteria**:
-  - [ ] Test POST /todos returns 201 and created todo
-  - [ ] Test POST /todos returns 422 for invalid data
-  - [ ] Test GET /todos returns 200 with todo list
-  - [ ] Test GET /todos/{id} returns 200 for existing todo
-  - [ ] Test GET /todos/{id} returns 404 for non-existent todo
-  - [ ] Test PUT /todos/{id} returns 200 and updated todo
-  - [ ] Test PUT /todos/{id} returns 404 for non-existent todo
-  - [ ] Test DELETE /todos/{id} returns 204 for successful deletion
-  - [ ] Test DELETE /todos/{id} returns 404 for non-existent todo
+  - [x] Test POST /todos returns 201 and created todo
+  - [x] Test POST /todos returns 422 for invalid data
+  - [x] Test GET /todos returns 200 with todo list
+  - [x] Test GET /todos/{id} returns 200 for existing todo
+  - [x] Test GET /todos/{id} returns 404 for non-existent todo
+  - [x] Test PUT /todos/{id} returns 200 and updated todo
+  - [x] Test PUT /todos/{id} returns 404 for non-existent todo
+  - [x] Test DELETE /todos/{id} returns 204 for successful deletion
+  - [x] Test DELETE /todos/{id} returns 404 for non-existent todo
 - **Files**: tests/test_api.py
-- **Status**: TODO
+- **Status**: DONE
 
 #### STORY-2.4: Test Coverage Verification
 - **Priority**: P1
 - **Phase**: test_auto
 - **Description**: Ensure test coverage is at least 90%
 - **Acceptance Criteria**:
-  - [ ] pytest-cov is configured
-  - [ ] Running tests with coverage shows >= 90% coverage
-  - [ ] Coverage report is generated and visible
+  - [x] pytest-cov is configured
+  - [x] Running tests with coverage shows >= 90% coverage
+  - [x] Coverage report is generated and visible
 - **Files**: pytest.ini (updated with coverage config)
-- **Status**: TODO
+- **Status**: DONE
 
 ### EPIC-3: CI/CD Pipeline
 
@@ -142,25 +142,25 @@ Build a REST API for a todo application using FastAPI and SQLite. The API will s
 - **Phase**: cicd
 - **Description**: Create Dockerfile for containerizing the application
 - **Acceptance Criteria**:
-  - [ ] Dockerfile builds successfully
-  - [ ] Docker image runs the FastAPI application
-  - [ ] Application is accessible on port 8000
-  - [ ] Dockerfile follows best practices (multi-stage build, non-root user)
+  - [x] Dockerfile builds successfully
+  - [x] Docker image runs the FastAPI application
+  - [x] Application is accessible on port 8000
+  - [x] Dockerfile follows best practices (multi-stage build, non-root user)
 - **Files**: Dockerfile
-- **Status**: TODO
+- **Status**: DONE
 
 #### STORY-3.2: GitHub Actions CI Pipeline
 - **Priority**: P0
 - **Phase**: cicd
 - **Description**: Create GitHub Actions workflow for CI
 - **Acceptance Criteria**:
-  - [ ] Workflow runs on push to main and pull requests
-  - [ ] Workflow installs dependencies
-  - [ ] Workflow runs all tests with coverage
-  - [ ] Workflow fails if tests fail or coverage is below 90%
-  - [ ] Workflow builds Docker image successfully
+  - [x] Workflow runs on push to main and pull requests
+  - [x] Workflow installs dependencies
+  - [x] Workflow runs all tests with coverage
+  - [x] Workflow fails if tests fail or coverage is below 90%
+  - [x] Workflow builds Docker image successfully
 - **Files**: .github/workflows/ci.yml
-- **Status**: TODO
+- **Status**: DONE
 
 ### EPIC-4: Documentation
 
@@ -169,21 +169,21 @@ Build a REST API for a todo application using FastAPI and SQLite. The API will s
 - **Phase**: validate
 - **Description**: Create comprehensive README with setup and usage instructions
 - **Acceptance Criteria**:
-  - [ ] README includes project description
-  - [ ] README includes installation instructions
-  - [ ] README includes API endpoint documentation
-  - [ ] README includes example requests/responses
-  - [ ] README includes Docker usage instructions
-  - [ ] README includes testing instructions
+  - [x] README includes project description
+  - [x] README includes installation instructions
+  - [x] README includes API endpoint documentation
+  - [x] README includes example requests/responses
+  - [x] README includes Docker usage instructions
+  - [x] README includes testing instructions
 - **Files**: README.md
-- **Status**: TODO
+- **Status**: DONE
 
 ## Non-Functional Requirements
-- [ ] All tests pass
-- [ ] Docker build succeeds
-- [ ] CI pipeline is green
-- [ ] No hardcoded secrets or credentials
-- [ ] Error handling covers edge cases
-- [ ] README is accurate and complete
-- [ ] Test coverage >= 90%
-- [ ] OpenAPI documentation is available at /docs
+- [x] All tests pass
+- [x] Docker build succeeds
+- [x] CI pipeline is green
+- [x] No hardcoded secrets or credentials
+- [x] Error handling covers edge cases
+- [x] README is accurate and complete
+- [x] Test coverage >= 90% (96.73%)
+- [x] OpenAPI documentation is available at /docs

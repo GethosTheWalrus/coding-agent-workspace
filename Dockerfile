@@ -18,6 +18,9 @@ WORKDIR /app
 # Create non-root user for security
 RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 
+# Create data directory for database
+RUN mkdir -p /app/data && chown appuser:appgroup /app/data
+
 # Copy installed packages from builder
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
