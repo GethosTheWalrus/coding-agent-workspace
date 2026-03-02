@@ -153,6 +153,20 @@ Build a REST API for a todo application using FastAPI and SQLite. The API will s
 - **Files**: .github/workflows/ci.yml
 - **Status**: DONE
 
+#### STORY-3.2: Docker Containerization
+- **Priority**: P1
+- **Phase**: cicd
+- **Description**: Create Dockerfile and docker-compose.yml for containerized deployment
+- **Acceptance Criteria**:
+  - [x] Dockerfile exists with multi-stage build (test-runner and production stages)
+  - [x] Dockerfile builds successfully
+  - [x] Tests pass inside Docker container
+  - [x] docker-compose.yml exists for local development
+  - [x] .dockerignore file excludes unnecessary files
+  - [x] .env.example provides environment variable template
+- **Files**: Dockerfile, docker-compose.yml, .dockerignore, .env.example
+- **Status**: DONE
+
 ### EPIC-4: Documentation and Configuration
 
 #### STORY-4.1: README Documentation
@@ -165,6 +179,7 @@ Build a REST API for a todo application using FastAPI and SQLite. The API will s
   - [x] API endpoints are documented with examples
   - [x] Running tests instructions are included
   - [x] Example curl commands are provided for each endpoint
+  - [x] Docker usage instructions are included
 - **Files**: README.md
 - **Status**: DONE
 
@@ -186,3 +201,5 @@ Build a REST API for a todo application using FastAPI and SQLite. The API will s
 - [x] No hardcoded secrets or credentials
 - [x] Error handling covers edge cases
 - [x] README is accurate and complete
+- [x] Docker container builds and runs successfully
+- [x] CI pipeline passes on all branches

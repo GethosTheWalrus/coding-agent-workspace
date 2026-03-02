@@ -7,12 +7,12 @@
 | implement    | DONE        | All implementation complete, 29 tests pass with 96% coverage |
 | test_manual  | DONE        | Manual testing completed - all API endpoints verified |
 | test_auto    | DONE        | All automated tests written and passing with 96% coverage |
-| cicd         | TODO        | |
+| cicd         | DONE        | CI/CD pipeline, Docker, and documentation complete |
 | validate     | TODO        | |
 
 ## Change Log
 - [plan] Created backlog with 4 epics, 12 stories, and comprehensive acceptance criteria
-- [plan] Backlog covers: Core API Implementation (5 stories), Testing (4 stories), CI/CD Pipeline (1 story), Documentation (2 stories)
+- [plan] Backlog covers: Core API Implementation (5 stories), Testing (4 stories), CI/CD Pipeline (2 stories), Documentation (2 stories)
 - [design] Created project structure with src/app/ directory layout
 - [design] Created requirements.txt with all dependencies (fastapi, uvicorn, sqlalchemy, pydantic, pydantic-settings, pytest, pytest-cov, httpx)
 - [design] Created configuration module (src/app/config.py) with Settings class using pydantic-settings and ConfigDict
@@ -47,3 +47,26 @@
   - Test files: tests/test_api.py, tests/test_crud.py, tests/conftest.py
   - All test_auto-phase stories marked as DONE
   - CI pipeline runs show success conclusion
+- [cicd] CI/CD pipeline and containerization complete
+  - GitHub Actions workflow at .github/workflows/ci.yml verified passing
+  - All recent CI runs show success conclusion
+  - Dockerfile created with multi-stage build (test-runner and production stages)
+  - docker-compose.yml created for local development and testing
+  - .dockerignore created to exclude unnecessary files from Docker builds
+  - .env.example created with environment variable templates
+  - Docker test image builds successfully and all tests pass inside container
+  - Docker production image builds successfully
+  - README.md updated with Docker usage instructions
+  - STORY-3.2 (Docker Containerization) marked as DONE
+  - All cicd-phase stories marked as DONE
+
+## CI/CD Verification
+- CI Workflow: .github/workflows/ci.yml
+  - Triggers: push to main, pull requests
+  - Python version: 3.10
+  - Tests: pytest with 90% coverage requirement
+  - Coverage upload: Codecov integration
+- Docker Verification:
+  - Test image (todo-api:test): All 29 tests pass with 96% coverage
+  - Production image (todo-api:prod): Builds successfully
+  - docker-compose: Both api and test services configured
