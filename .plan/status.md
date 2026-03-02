@@ -7,7 +7,7 @@
 | implement    | DONE        | All code implemented, tests pass with 97% coverage |
 | test_manual  | DONE        | All API endpoints manually verified with curl |
 | test_auto    | DONE        | All 34 automated tests pass with 96.73% coverage |
-| cicd         | TODO        | |
+| cicd         | DONE        | Docker and GitHub Actions CI pipeline configured |
 | validate     | TODO        | |
 
 ## Change Log
@@ -83,3 +83,24 @@
     - STORY-2.3: API Endpoint Tests - DONE
     - STORY-2.4: Test Coverage Verification - DONE
   - Updated backlog.md with automated testing results section
+- [cicd] CI/CD pipeline completed successfully:
+  - **Docker Configuration (STORY-3.1)**:
+    - Dockerfile with multi-stage build (builder + production stages)
+    - Non-root user (appuser) for security
+    - Health check configured (30s interval, 10s timeout)
+    - Exposes port 8000 for FastAPI application
+    - .dockerignore created to optimize build context (reduced from 35MB to 156KB)
+    - Docker build verified: `docker build -t todo-api .` succeeds
+    - Docker image runs correctly and app imports successfully
+  - **GitHub Actions CI Pipeline (STORY-3.2)**:
+    - Workflow runs on push to main/master and pull requests
+    - Three jobs configured: test, build, lint
+    - **test job**: Installs dependencies, runs pytest with coverage, fails if < 90%
+    - **build job**: Builds Docker image, verifies app imports
+    - **lint job**: Runs flake8, black formatting check, mypy type checking
+    - Coverage reports uploaded to Codecov
+    - Caching configured for pip packages and Docker layers
+  - All acceptance criteria for EPIC-3 (CI/CD Pipeline) verified:
+    - STORY-3.1: Docker Configuration - DONE
+    - STORY-3.2: GitHub Actions CI Pipeline - DONE
+  - Updated backlog.md with CI/CD testing results
