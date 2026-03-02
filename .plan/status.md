@@ -5,7 +5,7 @@
 | plan         | DONE        | Backlog created with 4 epics, 13 stories |
 | design       | DONE        | Architecture designed, scaffold files created |
 | implement    | DONE        | All code implemented, tests pass with 97% coverage |
-| test_manual  | TODO        | |
+| test_manual  | DONE        | All API endpoints manually verified with curl |
 | test_auto    | TODO        | |
 | cicd         | TODO        | |
 | validate     | TODO        | |
@@ -36,3 +36,28 @@
   - All 34 tests pass with 96.73% code coverage (exceeds 90% requirement)
   - Docker build succeeds and container runs correctly
   - Updated backlog.md to reflect all stories as DONE
+- [test_manual] Manual testing completed successfully:
+  - Docker build verified: `docker build -t todo-api .` succeeds
+  - Container runs correctly: `docker run -d --name todo-api-test -p 8000:8000 todo-api`
+  - All API endpoints tested with curl and verified:
+    - GET / - Returns API info (200)
+    - GET /health - Returns {"status": "healthy"} (200)
+    - POST /todos - Creates todo with full data (201)
+    - POST /todos with minimal data - Creates todo with just title (201)
+    - POST /todos with completed=true - Creates completed todo (201)
+    - POST /todos without title - Returns validation error (422)
+    - POST /todos with invalid title type - Returns validation error (422)
+    - POST /todos with empty title - Returns validation error (422)
+    - GET /todos - Returns paginated list of todos (200)
+    - GET /todos?completed=true - Filters by completed status (200)
+    - GET /todos/{id} - Returns specific todo (200)
+    - GET /todos/{id} for non-existent - Returns not found (404)
+    - PUT /todos/{id} - Updates todo with full data (200)
+    - PUT /todos/{id} partial update - Updates with partial fields (200)
+    - PUT /todos/{id} for non-existent - Returns not found (404)
+    - DELETE /todos/{id} - Deletes todo (204)
+    - DELETE /todos/{id} for non-existent - Returns not found (404)
+    - GET /docs - OpenAPI documentation accessible (200)
+  - Automated tests verified: All 34 tests pass with 96.73% coverage
+  - Edge cases tested: Invalid inputs, empty strings, non-existent resources
+  - Updated backlog.md with manual testing results section

@@ -187,3 +187,33 @@ Build a REST API for a todo application using FastAPI and SQLite. The API will s
 - [x] README is accurate and complete
 - [x] Test coverage >= 90% (96.73%)
 - [x] OpenAPI documentation is available at /docs
+
+## Manual Testing Results
+All acceptance criteria have been manually verified:
+
+### API Endpoints Tested
+- [x] GET / - Returns API info with name, version, and docs link
+- [x] GET /health - Returns {"status": "healthy"}
+- [x] POST /todos - Creates todo, returns 201 with created todo
+- [x] POST /todos with minimal data - Works with just title
+- [x] POST /todos with completed=true - Creates completed todo
+- [x] POST /todos without title - Returns 422 validation error
+- [x] POST /todos with invalid title type - Returns 422 validation error
+- [x] POST /todos with empty title - Returns 422 validation error
+- [x] GET /todos - Returns list of todos with pagination info
+- [x] GET /todos?completed=true - Filters by completed status
+- [x] GET /todos/{id} - Returns specific todo
+- [x] GET /todos/{id} for non-existent - Returns 404
+- [x] PUT /todos/{id} - Updates todo, returns 200
+- [x] PUT /todos/{id} partial update - Works with partial fields
+- [x] PUT /todos/{id} for non-existent - Returns 404
+- [x] DELETE /todos/{id} - Deletes todo, returns 204
+- [x] DELETE /todos/{id} for non-existent - Returns 404
+- [x] GET /docs - Returns 200 (OpenAPI docs accessible)
+
+### Edge Cases Tested
+- [x] Invalid data types are rejected with 422
+- [x] Empty strings are rejected with 422
+- [x] Non-existent resources return 404
+- [x] Pagination works correctly
+- [x] Filtering by completed status works
