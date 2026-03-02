@@ -5,7 +5,7 @@
 | plan         | DONE        | Backlog created with 4 epics, 12 stories |
 | design       | DONE        | Architecture designed, all scaffold files created and tested |
 | implement    | DONE        | All implementation complete, 29 tests pass with 96% coverage |
-| test_manual  | TODO        | |
+| test_manual  | DONE        | Manual testing completed - all API endpoints verified |
 | test_auto    | TODO        | |
 | cicd         | TODO        | |
 | validate     | TODO        | |
@@ -31,3 +31,13 @@
 - [implement] All implementation files verified complete and functional
 - [implement] All 29 tests pass with 96% code coverage
 - [implement] All implement-phase stories marked as DONE
+- [test_manual] Manual testing completed - all API endpoints verified with curl
+  - POST /todos/ - Creates todo, returns 201 Created
+  - GET /todos/ - Lists all todos, returns 200 OK
+  - GET /todos/{id} - Returns single todo (200) or 404 Not Found
+  - PUT /todos/{id} - Updates todo (200) or returns 404 Not Found
+  - DELETE /todos/{id} - Deletes todo (204 No Content) or returns 404 Not Found
+  - Validation errors return 422 Unprocessable Entity
+  - Swagger docs available at /docs endpoint (200 OK)
+  - All 29 automated tests pass with 96% code coverage
+  - coverage.xml generated for CI pipeline
