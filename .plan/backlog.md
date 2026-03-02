@@ -217,3 +217,48 @@ All acceptance criteria have been manually verified:
 - [x] Non-existent resources return 404
 - [x] Pagination works correctly
 - [x] Filtering by completed status works
+
+## Automated Testing Results
+All automated tests pass with comprehensive coverage:
+
+### Test Summary
+- **Total Tests**: 34
+- **Passed**: 34
+- **Failed**: 0
+- **Coverage**: 96.73% (exceeds 90% requirement)
+
+### Test Files
+- **tests/test_crud.py**: 15 unit tests for CRUD operations
+  - TestCreateTodo: 3 tests (valid data, minimal data, timestamps)
+  - TestGetTodo: 2 tests (existing, non-existent)
+  - TestGetTodos: 3 tests (all, pagination, filter)
+  - TestUpdateTodo: 3 tests (full update, partial update, non-existent)
+  - TestDeleteTodo: 2 tests (existing, non-existent)
+  - TestGetTodoCount: 2 tests (total count, filtered count)
+
+- **tests/test_api.py**: 19 integration tests for API endpoints
+  - TestCreateTodoEndpoint: 5 tests (success, minimal, completed, invalid, missing title)
+  - TestListTodosEndpoint: 4 tests (empty, with items, pagination, filter)
+  - TestGetTodoEndpoint: 2 tests (success, not found)
+  - TestUpdateTodoEndpoint: 4 tests (success, partial, not found, invalid)
+  - TestDeleteTodoEndpoint: 2 tests (success, not found)
+  - TestRootEndpoint: 1 test (root info)
+  - TestHealthEndpoint: 1 test (health check)
+
+### Coverage Report
+```
+Name              Stmts   Miss  Cover   Missing
+-----------------------------------------------
+app/__init__.py       0      0   100%
+app/config.py         8      0   100%
+app/crud.py          39      0   100%
+app/database.py      14      4    71%   36-40
+app/main.py          22      0   100%
+app/models.py        14      1    93%   23
+app/schemas.py       23      0   100%
+app/routes.py        33      0   100%
+-----------------------------------------------
+TOTAL               153      5    97%
+```
+
+All acceptance criteria for EPIC-2 (Testing) have been met.
