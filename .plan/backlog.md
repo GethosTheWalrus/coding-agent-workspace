@@ -20,11 +20,11 @@ Build a REST API for a todo application using FastAPI and SQLite. The API will s
 - **Phase**: design
 - **Description**: Set up the project structure, dependencies, and configuration files
 - **Acceptance Criteria**:
-  - [ ] requirements.txt file exists with FastAPI, uvicorn, SQLAlchemy, and pytest
-  - [ ] Project structure includes app/, tests/, and .github/workflows/ directories
-  - [ ] .gitignore file is configured for Python projects
+  - [x] requirements.txt file exists with FastAPI, uvicorn, SQLAlchemy, and pytest
+  - [x] Project structure includes app/, tests/, and .github/workflows/ directories
+  - [x] .gitignore file is configured for Python projects
 - **Files**: requirements.txt, .gitignore, app/__init__.py, tests/__init__.py
-- **Status**: TODO
+- **Status**: DONE
 
 #### STORY-1.2: Database Models and Connection
 - **Priority**: P0

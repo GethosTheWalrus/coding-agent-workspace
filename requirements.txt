@@ -1,0 +1,14 @@
+# FastAPI and web framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+
+# Database
+sqlalchemy==2.0.25
+
+# Testing
+pytest==7.4.4
+pytest-cov==4.1.0
+httpx==0.26.0
+
+# Type hints and validation
+pydantic==2.5.3
