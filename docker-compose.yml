@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///app/todos.db
+      - DEBUG=false
+    volumes:
+      - ./todos.db:/app/todos.db
+    restart: unless-stopped
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test-runner
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+    command: pytest --cov=src/app --cov-report=term-missing --cov-fail-under=90 -v
